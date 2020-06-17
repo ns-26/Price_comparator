@@ -11,7 +11,7 @@ from tkinter import *
 
 window=Tk()
 e_val=StringVar()
-def get_info():
+def Amazon():
     query = e_val.get()
     payload = {'q' : query}
     header = {'User-Agent' : 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36'}
@@ -27,7 +27,7 @@ def get_info():
             break;
             
 e1 = Entry(window, textvariable=e_val)
-b1 = Button(window, text="Amazon Search", command=get_info)
+b1 = Button(window, text="Amazon Search", command=Amazon)
 t1 = Text(window)
 e1.grid(row=0, column=0, columnspan=4)
 b1.grid(row=0, column=4, columnspan=2)
