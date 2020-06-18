@@ -78,35 +78,40 @@ def Flipkart():
 
 def Amazon(prodNameFlipkart,priceFlipkart):
     query = prodNameFlipkart
+    print("https://www.amazon.in/s?k="+prodNameFlipkart)
     header = {'User-Agent' : 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36'}
     
     
     r = rq.get("https://www.amazon.in/s?k="+query, headers=header)
     soup = BeautifulSoup(r.content, 'html.parser')
-    results_div = soup.find_all('div', attrs={'class' :re.compile('sg-col-4-of-24 sg-col-4-of-12 sg-col-4-of-36 sg-col-4-of-28 sg-col-4-of-16 sg-col sg-col-4-of-20 sg-col-4-of-32')})
+    results_div = soup.find_all('div', attrs={'class' :re.compile('sg-col-4-of-12 sg-col-8-of-16 sg-col-16-of-24 sg-col-12-of-20 sg-col-24-of-32 sg-col sg-col-28-of-36 sg-col-20-of-28')})
     results_div_deep=[];
     
-    
+
     for rd in results_div:
         results_div_deep.append(rd.find('span', attrs = {'class' : re.compile('a-price-whole')}))
     
-    for result in results_div_deep:
-        if result != None:
-            print(result.getText())
-            break;
+    if len(results_div_deep)>0:
+        for result in results_div_deep:
+            if result != None:
+                print(result.getText())
+                break;
 
-    newPrice=""
-    for character in result.getText():
-        if character =='0' or character =='1' or character =='2' or character =='3' or character =='4' or character =='5' or character =='6' or character =='7' or character =='8' or character =='9':
-            newPrice+=character
+        newPrice=""
+        for character in result.getText():
+            if character =='0' or character =='1' or character =='2' or character =='3' or character =='4' or character =='5' or character =='6' or character =='7' or character =='8' or character =='9':
+                newPrice+=character
 
-    priceAmazon = int(newPrice)
+        priceAmazon = int(newPrice)
 
 
-    if(priceAmazon<priceFlipkart):
-        print("Amazon has a better deal")
+        if(priceAmazon<priceFlipkart):
+            print("Amazon has a better deal")
+        else:
+            print("Flipkart has a better deal")
+    
     else:
-        print("Flipkart has a better deal")
+        print("Sorry product not available on amazon")
 
 
 e_val = StringVar()
