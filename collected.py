@@ -8,9 +8,6 @@ from tkinter import *
 window = Tk()
 
 
-
-
-
 def findGoogleLink():
     query = e_val.get()
     payload = {"q": query, 'num' : '20'}
@@ -32,6 +29,7 @@ def findGoogleLink():
             continue
     t = links[0]
     print(t)
+    Flipkart()
 
 
 def Flipkart():
@@ -50,7 +48,16 @@ def Flipkart():
         break;
 
     if price!=None :
-        print(price.getText());
+        priceText=price.getText();
+        print(priceText);
+    
+
+    newPrice=""
+    for character in priceText:
+        if character =='0' or character =='1' or character =='2' or character =='3' or character =='4' or character =='5' or character =='6' or character =='7' or character =='8' or character =='9':
+            newPrice+=character
+
+    priceFlipkart = int(newPrice)
 
 
     for name in results_div:
@@ -62,13 +69,15 @@ def Flipkart():
             break;
 
 
-    if prodName!=None :
-        print(prodName.getText());
+    if prodName !=None :
+        prodNameFlipkart = prodName.getText()
+        print(prodNameFlipkart);
+    
+    Amazon(prodNameFlipkart,priceFlipkart)
 
 
-def Amazon():
-    query = e_val.get()
-    payload = {'q' : query}
+def Amazon(prodNameFlipkart,priceFlipkart):
+    query = prodNameFlipkart
     header = {'User-Agent' : 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36'}
     
     
@@ -86,7 +95,18 @@ def Amazon():
             print(result.getText())
             break;
 
+    newPrice=""
+    for character in result.getText():
+        if character =='0' or character =='1' or character =='2' or character =='3' or character =='4' or character =='5' or character =='6' or character =='7' or character =='8' or character =='9':
+            newPrice+=character
 
+    priceAmazon = int(newPrice)
+
+
+    if(priceAmazon<priceFlipkart):
+        print("Amazon has a better deal")
+    else:
+        print("Flipkart has a better deal")
 
 
 e_val = StringVar()
