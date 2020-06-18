@@ -6,7 +6,7 @@ from tkinter import *
 
 
 window = Tk()
-
+window.geometry("600x300")
 
 def findGoogleLink():
     query = e_val.get()
@@ -27,12 +27,11 @@ def findGoogleLink():
                 links.append(link['href'])
         except:
             continue
-    t = links[0]
-    print(t)
-    Flipkart()
+    googleSearch = links[0]
+    Flipkart(googleSearch)
 
 
-def Flipkart():
+def Flipkart(googleSearch):
     query = e_val.get()
     payload = {'q' : query}
     header = {'User-Agent' : 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36'}
@@ -48,8 +47,7 @@ def Flipkart():
         break;
 
     if price!=None :
-        priceText=price.getText();
-        print(priceText);
+        priceText=price.getText()
     
 
     newPrice=""
@@ -71,14 +69,12 @@ def Flipkart():
 
     if prodName !=None :
         prodNameFlipkart = prodName.getText()
-        print(prodNameFlipkart);
     
-    Amazon(prodNameFlipkart,priceFlipkart)
+    Amazon(googleSearch,prodNameFlipkart,priceFlipkart)
 
 
-def Amazon(prodNameFlipkart,priceFlipkart):
+def Amazon(googleSearch,prodNameFlipkart,priceFlipkart):
     query = prodNameFlipkart
-    print("https://www.amazon.in/s?k="+prodNameFlipkart)
     header = {'User-Agent' : 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36'}
     
     
@@ -92,13 +88,15 @@ def Amazon(prodNameFlipkart,priceFlipkart):
         results_div_deep.append(rd.find('span', attrs = {'class' : re.compile('a-price-whole')}))
     
     if len(results_div_deep)>0:
+        results=""
         for result in results_div_deep:
             if result != None:
-                print(result.getText())
-                break;
+                results=result.getText()
+                break
+
 
         newPrice=""
-        for character in result.getText():
+        for character in results:
             if character =='0' or character =='1' or character =='2' or character =='3' or character =='4' or character =='5' or character =='6' or character =='7' or character =='8' or character =='9':
                 newPrice+=character
 
@@ -112,11 +110,59 @@ def Amazon(prodNameFlipkart,priceFlipkart):
     
     else:
         print("Sorry product not available on amazon")
+        priceAmazon=0
 
+    
+    display(googleSearch,prodNameFlipkart,priceFlipkart,priceAmazon)
+
+
+def display(googleSearch,prodNameFlipkart,priceFlipkart,priceAmazon):
+    googleLabel=Label(window,text="Know more at:")
+    googleLabel.grid(row=1,column=0)
+
+    googleLink=Label(window,text=googleSearch)
+    googleLink.grid(row=2,column=0)
+
+    shopLabel=Label(window,text="Shop at:")
+    shopLabel.grid(row=3,column=0)
+
+    flipkartLabel=Label(window,text="Flipkart")
+    flipkartLabel.grid(row=4,column=0)
+
+    flipkartDescription=Label(window,text=prodNameFlipkart)
+    flipkartDescription.grid(row=5,column=0)
+
+    flipkartPrice=Label(window,text=priceFlipkart)
+    flipkartPrice.grid(row=6,column=0)
+
+    AmazonLabel=Label(window,text="Amazon")
+    AmazonLabel.grid(row=7,column=0)
+
+    AmazonDescription=Label(window,text=prodNameFlipkart)
+    AmazonDescription.grid(row=8,column=0)
+
+    AmazonPrice=Label(window,text=priceAmazon)
+    AmazonPrice.grid(row=9,column=0)
+
+    if priceAmazon==0:
+        prefer=Label(window,text="Sorry product not available at Amazon")
+        link=Label(window,text="View more at:https://www.flipkart.com/search?q="+prodNameFlipkart)
+        prefer.grid(row=10,column=0)
+        link.grid(row=11,column=0)
+    elif(priceAmazon<priceFlipkart):
+        prefer=Label(window,text="Amazon has a better deal")
+        link=Label(window,text="View more at:https://www.amazon.in/s?k="+prodNameFlipkart)
+        prefer.grid(row=10,column=0)
+        link.grid(row=11,column=0)
+    else:
+        prefer=Label(window,text="Flipkart has a better deal")
+        link=Label(window,text="View more at:https://www.flipkart.com/search?q="+prodNameFlipkart)
+        prefer.grid(row=10,column=0)
+        link.grid(row=11,column=0)
 
 e_val = StringVar()
 e1 = Entry(window, textvariable = e_val)
 b1 = Button(window, text="Search Item", command=findGoogleLink)
-e1.grid(row=0, column=0, columnspan=3)
+e1.grid(row=0, column=0)
 b1.grid(row=0, column=3)
 window.mainloop()
